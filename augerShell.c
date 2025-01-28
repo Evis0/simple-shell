@@ -15,9 +15,9 @@ int main(){
 }
 
 void driver(){
-
+  // 
   char input[512];
-  // char delim[8] = {' ', '\t', '|', '<', '>', '&', ';'};
+  char delim[8] = {' ', '\t', '|', '<', '>', '&', ';'};
   int goFlag = 1;
 
   while(goFlag){
@@ -25,8 +25,7 @@ void driver(){
     if(!fgets(input,512,stdin)){
       printf("\n");
       break;
-    } if(strcmp(input,"exit")){
-      printf("%s, %d",input,strcmp(input,"exit"));
+    } if(strcmp(input,"exit\n") == 0){
       break;
     }
     
