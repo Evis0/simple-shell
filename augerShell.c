@@ -13,19 +13,25 @@
 #define MAX_TOKENS 50
 #define MAX_INPUT_LENGTH 512
 
-void driver();
+void run_shell();
 void launch_child(char *command, char** argv);
 char* get_path();
 void unit_tests();
 
+
+/*
+	Author: Emily Probin and Ruairidh Blair 
+	Description: starts the run_shell function and returns 0 after
+*/
 int main(){
 	//unit_tests();
-	driver();
+	run_shell();
 	return 0;
 }
 
 /*
 	Author: Ruairidh Blair and Emily Probin
+	Description: Tokenises the input into an array of strings, using set delimiters
 */
 int tokenisation(char* input, char** tokenArray, char* delim) {
 	// Loop using the strtok function and stores each token in the tokenArray
@@ -38,8 +44,12 @@ int tokenisation(char* input, char** tokenArray, char* delim) {
       //printf("%p\n", token);
       i++;
     }
+    if (i > MAX_TOKENS) {
+		printf("Tokens have exceeded limit of 50. The first 50 tokens have been considered.");
+	}
     // Set the next position in array to NULL to make it easier to loop through
     tokenArray[i] = NULL;
+    
     /*
     for (int j = 0; j<MAX_TOKENS; j++){
 	    if (tokenArray[j] == NULL) {
@@ -56,8 +66,9 @@ int tokenisation(char* input, char** tokenArray, char* delim) {
 
 /*
 	Author: Emily Probin and Ruairidh Blair
+	Description: Runs the shell, takes input, lunches child processes
 */
-void driver(){
+void run_shell(){
   char input[MAX_INPUT_LENGTH];
 
   // This holds all of the delimiters for the strtok function
@@ -94,6 +105,9 @@ void driver(){
 /*
 	Author: Emily Probin
 	Date: 31/1/25
+	Description: Launches child process. Child process runs the program and passes the arguments, if that
+	fails then it exits the program. If the parent is childless it sends an error message. The parent process
+	waits for the child process before returning to the main shell.
 	https://man7.org/linux/man-pages/man2/fork.2.html
 	https://man7.org/linux/man-pages/man2/wait.2.html
 */
@@ -122,6 +136,7 @@ void launch_child(char *command, char** argv){
 /*
 	Author: Emily Probin
 	Date: 31/1/25 
+	Description: Gets the path and returns it (string). Using the getenv function.
 */
 char* get_path(){
 	char* path = getenv("PATH");
@@ -136,6 +151,8 @@ char* get_path(){
 /*
 	Author: Emily Probin
 	Date: 31/1/25 
+	Description: Little helper function to compare 2 arrays of strings and return 1 if they are the same 
+	and 0 if they arent
 */
 int compare_arrays(char** array1, char** array2){
 	
@@ -153,9 +170,11 @@ int compare_arrays(char** array1, char** array2){
 	return 0;
 }
 
+
 /*
 	Author: Emily Probin
 	Date: 2/2/25 
+	Description: Test to see if the tokenisation function is working
 */
 void unit_tests() {
 	char delim[9] = {' ', '\t', '|', '<', '>', '&', ';', '\n', 0};
