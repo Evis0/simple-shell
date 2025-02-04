@@ -9,14 +9,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
+#include "augerShell.h"
+
 
 #define MAX_TOKENS 50
 #define MAX_INPUT_LENGTH 512
 
-void run_shell();
-void launch_child(char *command, char** argv);
-char* get_path();
-void unit_tests();
 
 
 /*
