@@ -122,7 +122,8 @@ void launch_child(char *command, char** argv){
 		// execute program
 		execvp(command, argv);	// will return -1 or never return
 		// will only return if exec failed
-		printf("Exec failed! %s\n", strerror(errno));
+		printf("ERROR %s failed: %s\n", command, strerror(errno));
+		
 		exit(-1);
 		
 	} else if (PID == -1) {
