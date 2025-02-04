@@ -1,4 +1,4 @@
-	/*
+/*
   Author(s): Emily Probin and Ruairidh Blair
   Version: 0.2
   Date: 28/1/25
@@ -82,6 +82,9 @@ void run_shell(){
       printf("\n");
       break;
     } 
+   	fflush(stdin);
+   	
+   	
     if(strcmp(input,"exit\n") == 0){
       break;
     }
@@ -115,7 +118,7 @@ void launch_child(char *command, char** argv){
 	pid_t PID = fork();
 	
 	if (PID == 0) {
-		printf("I am in child\n");
+		//printf("I am in child\n");
 		//printf("Path is %s", get_path());
 		
 		// execute program
@@ -125,11 +128,11 @@ void launch_child(char *command, char** argv){
 		exit(-1);
 		
 	} else if (PID == -1) {
-		printf("I am a childless parent\n");
+		//printf("I am a childless parent\n");
 		printf("Error in fork - errno = %i\n", errno);
 	} else {
 		wait(NULL);
-		printf("Finished child process.\n");
+		//printf("Finished child process.\n");
 	}
 }
 
