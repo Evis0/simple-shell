@@ -22,8 +22,15 @@
 	Description: starts the run_shell function and returns 0 after
 */
 int main(){
+	const char* original_path = get_path();
+	chdir(getenv("HOME"));
+	
 	//unit_tests();
 	run_shell();
+	setenv("PATH", original_path, 0);
+	
+	printf("%s \n\n%s", original_path, get_path());
+	
 	return 0;
 }
 
@@ -56,7 +63,7 @@ int tokenisation(char* input, char** tokenArray, char* delim) {
 		printf("%s\n", tokenArray[i]);
 	}
 	*/
-
+	
 	return i;
 }
 
@@ -67,6 +74,8 @@ int tokenisation(char* input, char** tokenArray, char* delim) {
 	Description: Runs the shell, takes input, lunches child processes
 */
 void run_shell(){
+	
+	
   char input[MAX_INPUT_LENGTH];
 
   // This holds all of the delimiters for the strtok function
@@ -122,7 +131,7 @@ void launch_child(char *command, char** argv){
 		// execute program
 		execvp(command, argv);	// will return -1 or never return
 		// will only return if exec failed
-		printf("ERROR %s failed: %s\n", command, strerror(errno));
+		printf("ERROR! %s failed: %s\n", command, strerror(errno));
 		
 		exit(-1);
 		
@@ -144,9 +153,24 @@ char* get_path(){
 	char* path = getenv("PATH");
 	//printf("%s\n", path);
 	if (path == NULL){
-		printf("oh no\n");
+		printf("Failed to get path.\n");
 	}
 	return path;
+}
+
+/*
+	Author: Emily Probin
+	Date: 4/1/25
+	Description: Sets the path and returns 1 for success and 0 for failure
+*/
+int set_path(char* value){
+	
+	int result = setenv("PATH", value, 0);
+	if (result) {
+		printf("ERROR! Set path failed: %s\n", strerror(errno));
+		return 0;
+	}
+	return 1;
 }
 
 
