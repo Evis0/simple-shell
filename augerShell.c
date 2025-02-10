@@ -14,6 +14,7 @@
 
 #define MAX_TOKENS 50
 #define MAX_INPUT_LENGTH 512
+#define PATH_MAX 4096
 
 
 
@@ -23,13 +24,29 @@
 */
 int main(){
 	const char* original_path = get_path();
-	chdir(getenv("HOME"));
+	
+	const char original_wd[PATH_MAX];
+	getcwd[original_wd, PATH_MAX];
+	
+	printf("%s\n", original_wd);
+	int chdir_return = chdir(getenv("HOME"));
+	if (chdir_return == -1) {
+		printf("ERROR! Change directory to HOME failed: %s\n", strerror(errno));
+	}
+	printf("%s\n", getcwd());
 	
 	//unit_tests();
 	run_shell();
+
 	setenv("PATH", original_path, 0);
-	
 	printf("%s \n\n%s", original_path, get_path());
+
+	// probably don't need to do this
+	chdir_return = chdir(original_wd);
+	if (chdir_return == -1) {
+		printf("ERROR! Change directory to original failed: %s\n", strerror(errno));
+	}
+	
 	
 	return 0;
 }
@@ -101,13 +118,33 @@ void run_shell(){
       launch_child("python3", args);
       continue;
     }
+//    if(strcmp(input,"getpath\n") == 0){
+//      char* path = get_path();
+//      printf("The path is  %s\n", path);
+//      continue;
+//    }
 	
     // Loop using the strtok function and stores each token in the tokenArray
     char *tokenArray[MAX_TOKENS+1];
     int i = tokenisation(input, tokenArray, delim);
+	
+	
+	if(strcmp(tokenArray[0],"getpath") == 0){
+      char* path = get_path();
+      printf("The path is  %s\n", path);
+      continue;
+    }
+	if (strcmp(tokenArray[0], "setpath") == 0){
+		if (i>2) {
+			printf("Too many parameters\n");
+			continue;
+		}
+		set_path(tokenArray[1]);
+	}
 	if (i > 0) {
 		launch_child(tokenArray[0], tokenArray);
 	}
+	
 	
   }
 }
