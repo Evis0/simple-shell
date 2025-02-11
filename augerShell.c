@@ -129,7 +129,7 @@ void run_shell(){
 			continue;
 		}
 		if (i == 1){
-			printf("Not enough parameters, must include path you want to set");
+			printf("Not enough parameters, must include path you want to set\n");
 			continue;
 		}
 		set_path(tokenArray[1]);
