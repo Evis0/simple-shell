@@ -25,15 +25,15 @@
 int main(){
 	const char* original_path = get_path();
 	
-	const char original_wd[PATH_MAX];
-	getcwd[original_wd, PATH_MAX];
+	static char original_wd[PATH_MAX];
+	getcwd(original_wd, PATH_MAX);
 	
 	printf("%s\n", original_wd);
 	int chdir_return = chdir(getenv("HOME"));
 	if (chdir_return == -1) {
 		printf("ERROR! Change directory to HOME failed: %s\n", strerror(errno));
 	}
-	printf("%s\n", getcwd());
+	//printf("%s\n", getcwd());
 	
 	//unit_tests();
 	run_shell();
@@ -140,7 +140,27 @@ void run_shell(){
 			continue;
 		}
 		set_path(tokenArray[1]);
+		continue;
 	}
+	if (strcmp(tokenArray[0], "cd") == 0) {
+		int iserror = 0;
+		if (i>2) {
+			printf("Too many parameters\n");
+			continue;
+		}
+		if (i==1) {
+			iserror = chdir(getenv("HOME"));
+			if (iserror) {
+				printf("ERROR! cd failed: %s\n", strerror(errno));
+			}
+			continue;
+		}
+		iserror = chdir(tokenArray[1]);
+		if (iserror) {
+			printf("ERROR! cd failed: %s: %s\n", strerror(errno), tokenArray[1]);
+		}
+		continue;
+		}
 	if (i > 0) {
 		launch_child(tokenArray[0], tokenArray);
 	}
