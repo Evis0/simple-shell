@@ -28,7 +28,7 @@ int main(){
 	static char original_wd[PATH_MAX];
 	getcwd(original_wd, PATH_MAX);
 	
-	printf("%s\n", original_wd);
+	//printf("%s\n", original_wd);
 	int chdir_return = chdir(getenv("HOME"));
 	if (chdir_return == -1) {
 		printf("ERROR! Change directory to HOME failed: %s\n", strerror(errno));
@@ -39,7 +39,7 @@ int main(){
 	run_shell();
 
 	setenv("PATH", original_path, 0);
-	printf("%s \n\n%s", original_path, get_path());
+	//printf("%s \n\n%s", original_path, get_path());
 
 	// probably don't need to do this
 	chdir_return = chdir(original_wd);
@@ -112,17 +112,6 @@ void run_shell(){
     if(strcmp(input,"exit\n") == 0){
       break;
     }
-	if(strcmp(input,"test\n") == 0){
-	  char *args[] = {"python3", "--version", NULL}; 
-
-      launch_child("python3", args);
-      continue;
-    }
-//    if(strcmp(input,"getpath\n") == 0){
-//      char* path = get_path();
-//      printf("The path is  %s\n", path);
-//      continue;
-//    }
 	
     // Loop using the strtok function and stores each token in the tokenArray
     char *tokenArray[MAX_TOKENS+1];
@@ -137,6 +126,10 @@ void run_shell(){
 	if (strcmp(tokenArray[0], "setpath") == 0){
 		if (i>2) {
 			printf("Too many parameters\n");
+			continue;
+		}
+		if (i == 1){
+			printf("Not enough parameters, must include path you want to set");
 			continue;
 		}
 		set_path(tokenArray[1]);
@@ -217,12 +210,12 @@ char* get_path(){
 
 /*
 	Author: Emily Probin
-	Date: 4/1/25
+	Date: 4/2/25
 	Description: Sets the path and returns 1 for success and 0 for failure
 */
 int set_path(char* value){
 	
-	int result = setenv("PATH", value, 0);
+	int result = setenv("PATH", value, 1);
 	if (result) {
 		printf("ERROR! Set path failed: %s\n", strerror(errno));
 		return 0;
