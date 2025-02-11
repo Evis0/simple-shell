@@ -14,6 +14,7 @@
 
 #define MAX_TOKENS 50
 #define MAX_INPUT_LENGTH 512
+#define PATH_MAX 4096
 
 
 
@@ -22,8 +23,31 @@
 	Description: starts the run_shell function and returns 0 after
 */
 int main(){
+	const char* original_path = get_path();
+	
+	static char original_wd[PATH_MAX];
+	getcwd(original_wd, PATH_MAX);
+	
+	printf("%s\n", original_wd);
+	int chdir_return = chdir(getenv("HOME"));
+	if (chdir_return == -1) {
+		printf("ERROR! Change directory to HOME failed: %s\n", strerror(errno));
+	}
+	//printf("%s\n", getcwd());
+	
 	//unit_tests();
 	run_shell();
+
+	setenv("PATH", original_path, 0);
+	printf("%s \n\n%s", original_path, get_path());
+
+	// probably don't need to do this
+	chdir_return = chdir(original_wd);
+	if (chdir_return == -1) {
+		printf("ERROR! Change directory to original failed: %s\n", strerror(errno));
+	}
+	
+	
 	return 0;
 }
 
@@ -56,7 +80,7 @@ int tokenisation(char* input, char** tokenArray, char* delim) {
 		printf("%s\n", tokenArray[i]);
 	}
 	*/
-
+	
 	return i;
 }
 
@@ -67,6 +91,8 @@ int tokenisation(char* input, char** tokenArray, char* delim) {
 	Description: Runs the shell, takes input, lunches child processes
 */
 void run_shell(){
+	
+	
   char input[MAX_INPUT_LENGTH];
 
   // This holds all of the delimiters for the strtok function
@@ -92,13 +118,53 @@ void run_shell(){
       launch_child("python3", args);
       continue;
     }
+//    if(strcmp(input,"getpath\n") == 0){
+//      char* path = get_path();
+//      printf("The path is  %s\n", path);
+//      continue;
+//    }
 	
     // Loop using the strtok function and stores each token in the tokenArray
     char *tokenArray[MAX_TOKENS+1];
     int i = tokenisation(input, tokenArray, delim);
+	
+	
+	if(strcmp(tokenArray[0],"getpath") == 0){
+      char* path = get_path();
+      printf("The path is  %s\n", path);
+      continue;
+    }
+	if (strcmp(tokenArray[0], "setpath") == 0){
+		if (i>2) {
+			printf("Too many parameters\n");
+			continue;
+		}
+		set_path(tokenArray[1]);
+		continue;
+	}
+	if (strcmp(tokenArray[0], "cd") == 0) {
+		int iserror = 0;
+		if (i>2) {
+			printf("Too many parameters\n");
+			continue;
+		}
+		if (i==1) {
+			iserror = chdir(getenv("HOME"));
+			if (iserror) {
+				printf("ERROR! cd failed: %s\n", strerror(errno));
+			}
+			continue;
+		}
+		iserror = chdir(tokenArray[1]);
+		if (iserror) {
+			printf("ERROR! cd failed: %s: %s\n", strerror(errno), tokenArray[1]);
+		}
+		continue;
+		}
 	if (i > 0) {
 		launch_child(tokenArray[0], tokenArray);
 	}
+	
 	
   }
 }
@@ -122,7 +188,7 @@ void launch_child(char *command, char** argv){
 		// execute program
 		execvp(command, argv);	// will return -1 or never return
 		// will only return if exec failed
-		printf("ERROR %s failed: %s\n", command, strerror(errno));
+		printf("ERROR! %s failed: %s\n", command, strerror(errno));
 		
 		exit(-1);
 		
@@ -144,9 +210,24 @@ char* get_path(){
 	char* path = getenv("PATH");
 	//printf("%s\n", path);
 	if (path == NULL){
-		printf("oh no\n");
+		printf("Failed to get path.\n");
 	}
 	return path;
+}
+
+/*
+	Author: Emily Probin
+	Date: 4/1/25
+	Description: Sets the path and returns 1 for success and 0 for failure
+*/
+int set_path(char* value){
+	
+	int result = setenv("PATH", value, 0);
+	if (result) {
+		printf("ERROR! Set path failed: %s\n", strerror(errno));
+		return 0;
+	}
+	return 1;
 }
 
 
