@@ -108,7 +108,10 @@ void run_shell(){
     } 
    	fflush(stdin);
    	
-   	
+	if(strcmp(input, "\n") == 0){
+		continue;
+	}
+
     if(strcmp(input,"exit\n") == 0){
       break;
     }
@@ -116,6 +119,7 @@ void run_shell(){
     // Loop using the strtok function and stores each token in the tokenArray
     char *tokenArray[MAX_TOKENS+1];
     int i = tokenisation(input, tokenArray, delim);
+	
 	
 	
 	if(strcmp(tokenArray[0],"getpath") == 0){
