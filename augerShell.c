@@ -72,12 +72,12 @@ int tokenisation(char* input, char** tokenArray, char* delim) {
     // Set the next position in array to NULL to make it easier to loop through
     tokenArray[i] = NULL;
     
-    /*
+   /*
     for (int j = 0; j<MAX_TOKENS; j++){
 	    if (tokenArray[j] == NULL) {
 		    break;
 		}
-		printf("%s\n", tokenArray[i]);
+		printf("'%s'\n", tokenArray[j]);
 	}
 	*/
 	
@@ -107,10 +107,6 @@ void run_shell(){
       break;
     } 
    	fflush(stdin);
-   	
-	if(strcmp(input, "\n") == 0){
-		continue;
-	}
 
     if(strcmp(input,"exit\n") == 0){
       break;
@@ -120,7 +116,9 @@ void run_shell(){
     char *tokenArray[MAX_TOKENS+1];
     int i = tokenisation(input, tokenArray, delim);
 	
-	
+	if (tokenArray[0] == NULL) {
+		continue;
+	}
 	
 	if(strcmp(tokenArray[0],"getpath") == 0){
       char* path = get_path();
@@ -157,7 +155,8 @@ void run_shell(){
 			printf("ERROR! cd failed: %s: %s\n", strerror(errno), tokenArray[1]);
 		}
 		continue;
-		}
+	}
+		
 	if (i > 0) {
 		launch_child(tokenArray[0], tokenArray);
 	}
@@ -177,7 +176,6 @@ void run_shell(){
 */
 void launch_child(char *command, char** argv){
 	pid_t PID = fork();
-	
 	if (PID == 0) {
 		//printf("I am in child\n");
 		//printf("Path is %s", get_path());
