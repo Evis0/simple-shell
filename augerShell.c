@@ -96,6 +96,7 @@ void run_shell(){
   char input[MAX_INPUT_LENGTH];
 
   // This holds all of the delimiters for the strtok function
+  		 // note: 0 is not a delimiter, a function used later treats this as a string, the 0 is to terminate the string
   char delim[9] = {' ', '\t', '|', '<', '>', '&', ';', '\n', 0};
 
   // This will alway run unless the break command is used
