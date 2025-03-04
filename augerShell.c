@@ -10,6 +10,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include "augerShell.h"
+#include "augerShellAlias.h"
 
 
 #define MAX_TOKENS 50

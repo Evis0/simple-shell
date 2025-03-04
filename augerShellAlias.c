@@ -29,6 +29,7 @@ void add_alias(char* name, char* command) {
     strcpy(alias_list[alias_count].name, name);
     strcpy(alias_list[alias_count].command, command);
     alias_count++;
+    printf(("Alias has been added.\n"));
 }
 
 // Removes an alias by shifting elements
