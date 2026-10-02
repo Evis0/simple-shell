@@ -1,93 +1,81 @@
-# CS210SimpleShell
+Simple Shell
+
+A custom UNIX command-line interpreter written in C, designed to recreate core shell mechanics including command parsing, process management, and built-in execution.
+
+Key Features
+Command Parsing & Execution: Reads, parses, and executes user commands by launching child processes via system calls.
+
+Path Resolution: Searches the system PATH environment variable to locate and execute binary programs.
+
+Built-In Commands: Implemented native shell commands such as cd, exit, and env.
+
+Process & Signal Handling: Manages process creation using fork and execve, while handling standard signals gracefully.
+
+Tech Stack & Tools
+Language: C
+
+Compiler: GCC / Clang
+
+Concepts: System Calls (fork, execve, wait, pipe), UNIX Process Management, Memory Management
+
+Version Control: Git & GitHub
+
+Getting Started
+Prerequisites
+GCC compiler or any C development toolchain
+
+Linux/UNIX environment or WSL (Windows Subsystem for Linux)
+
+Compilation & Setup
+Clone the repository:
+git clone https://github.com/Evis0/simple-shell.git
+cd simple-shell
+
+Compile the source files:
+gcc -Wall -Werror -Wextra -pedantic *.c -o simple_shell
+
+Run the shell:
+./simple_shell
+
+Built-in Commands
 
 
+cd [directory]
 
-## Getting started
+cd: Takes you to your HOME directory.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+cd -: Takes you back to the previous folder (OLDPWD).
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+cd <path>: Moves to a specific folder path.
 
-## Add your files
+exit [status]
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+exit: Closes the shell with status 0.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.cis.strath.ac.uk/fqb23140/cs210simpleshell.git
-git branch -M main
-git push -uf origin main
-```
+exit <status>: Closes the shell with a specific exit status code.
 
-## Integrate with your tools
+env: Prints all environment variables.
 
-- [ ] [Set up project integrations](https://gitlab.cis.strath.ac.uk/fqb23140/cs210simpleshell/-/settings/integrations)
+setenv <variable> <value>: Creates or updates an environment variable.
 
-## Collaborate with your team
+unsetenv <variable>: Deletes an environment variable.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Regular Commands & Programs
+System Commands (ls, pwd, mkdir, grep, cat, rm):
 
-## Test and Deploy
+Automatically searches your system PATH directories to find and run standard Linux commands.
 
-Use the built-in continuous integration in GitLab.
+Direct File Paths (/bin/ls, ./my_program):
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Runs any program directly using its exact file path.
 
-***
+Special Characters
+; (Semicolon): Run multiple commands on one line.
 
-# Editing this README
+Example: ls; pwd; env
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+# (Comment): Everything after # is ignored.
 
-## Suggestions for a good README
+Example: ls -l # list files
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Ctrl+D (EOF): Exits the shell cleanly.
